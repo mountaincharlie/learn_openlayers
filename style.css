@@ -3,13 +3,34 @@
 html, body {
   margin: 0;
   height: 100%;
+  box-sizing: border-box;
 }
+
+header{
+  height: 10vh;
+}
+
+header h1{
+  color:rgb(45, 184, 184);
+  margin-top: 0;
+  padding-top: 25px;
+  text-align: center;
+}
+
+main{
+  height: 90vh;
+  width: 100%;
+}
+
 #map {
-  position: absolute;
+  height: 90vh;
+  width: 100%;
+  /* position: absolute;
   top: 0;
   bottom: 0;
-  width: 100%;
+  width: 100%; */
   /* playign with adding border to map */
-  border: 4px solid cyan;
+  border: 8px solid rgb(45, 184, 184);
+  border-radius: 4px;;
   box-sizing: border-box;
 }

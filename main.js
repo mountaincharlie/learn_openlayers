@@ -16,6 +16,8 @@ import Icon from 'ol/style/Icon';
 import {Fill, Stroke, Style} from 'ol/style';
 
 
+// --- MAP INSTANCE
+
 // my View
 var myView = new View({
   center: fromLonLat([-1.162556, 51.360851]),  // [-1.162556, 51.360851] for Hercules House, [-0.5595, 51.236] for roughly my house
@@ -31,18 +33,19 @@ var myBaseLayer = new TileLayer({
 var myLabelsLayer = new TileLayer({
   source: new Stamen({layer: 'terrain-labels'})  // adds terrian labels
 });
-
-// all the layers
 var myLayers = [myBaseLayer, ];  // myLabelsLayer
 
-// creates a new instance of Map
+// instance of Map
 const map = new Map({
   target: 'map',  // must match the id given in the html
   layers: myLayers,  // all layers
   view: myView
 });
 
-// styles for vector layer
+
+// --- VECTOR LAYERS
+
+// styles for vectorLayer
 const vectorLayerFill = new Style({
   fill: new Fill({
     color: 'rgba(45, 184, 184,0.3)',
@@ -55,22 +58,22 @@ const vectorLayerStroke = new Style({
   })
 });
 
-
-// adding a vector layer
-const vectorLayer = new VectorImageLayer({
+// Calleva Park - vectorLayer
+const vectorLayerCP = new VectorImageLayer({
   source: new VectorSource({
-    url: './data/polygons.geojson',
+    url: './data/calleva_park.geojson',
     format: new GeoJSON()  // specifying the format the data is in
   }),
   style: [vectorLayerFill, vectorLayerStroke],
   visible: true,
   title: 'Calleva Park'
 });
+map.addLayer(vectorLayerCP);  // adding the vectorLayer to the map 
 
-// adding the vectorLayer to the map (BUG: isnt showing up on map)
-map.addLayer(vectorLayer);
 
-// creating a marker (BUG: need to workout why its not showing up)
+// --- MARKERS
+
+// Calleva Park - marker
 const marker = new VectorLayer({  // creates new vetor layer
   source: new VectorSource({  // new vector source
     features: [  // has list of features which include the geometry Point
@@ -89,8 +92,10 @@ const marker = new VectorLayer({  // creates new vetor layer
       anchor: [0.5, 1],  // halfway into the image and at the bottom (anchor coors start top left corner)
       imgSize: [20,20],
     })
-  })
+  }),
+  visible: true,
 });
+map.addLayer(marker);  // adding the marker to the map 
 
-// making the marker visible
-map.addLayer(marker);
+
+

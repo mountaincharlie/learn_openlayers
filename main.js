@@ -14,7 +14,6 @@ import { Geometry } from 'ol/geom';
 import * as olProj from 'ol/proj';
 import Icon from 'ol/style/Icon';
 import {Fill, Stroke, Style} from 'ol/style';
-import CircleStyle from 'ol/style/Circle.js';
 
 
 // my View
@@ -34,7 +33,7 @@ var myLabelsLayer = new TileLayer({
 });
 
 // all the layers
-var myLayers = [myBaseLayer, myLabelsLayer];
+var myLayers = [myBaseLayer, ];  // myLabelsLayer
 
 // creates a new instance of Map
 const map = new Map({
@@ -43,28 +42,33 @@ const map = new Map({
   view: myView
 });
 
+// styles for vector layer
+const vectorLayerFill = new Style({
+  fill: new Fill({
+    color: 'rgba(45, 184, 184,0.3)',
+  })
+});
+const vectorLayerStroke = new Style({
+  stroke: new Stroke({
+    color: 'rgb(45, 184, 184)',
+    width: 2,
+  })
+});
+
+
 // adding a vector layer
 const vectorLayer = new VectorImageLayer({
   source: new VectorSource({
     url: './data/polygons.geojson',
     format: new GeoJSON()  // specifying the format the data is in
   }),
-  style: new Style({
-    fill: new Fill({
-      color: 'rgba(45, 184, 184,0.3)',
-    }),
-    stroke: new Stroke({
-      color: 'rgb(45, 184, 184)',
-      width: 2,
-    }),
-  }),
+  style: [vectorLayerFill, vectorLayerStroke],
   visible: true,
   title: 'Calleva Park'
 });
 
 // adding the vectorLayer to the map (BUG: isnt showing up on map)
 map.addLayer(vectorLayer);
-
 
 // creating a marker (BUG: need to workout why its not showing up)
 const marker = new VectorLayer({  // creates new vetor layer

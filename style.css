@@ -6,21 +6,36 @@ html, body {
   box-sizing: border-box;
 }
 
+/* ----- HEADER */
 header{
   height: 10vh;
+  box-sizing: border-box;
 }
 
 header h1{
   color:rgb(45, 184, 184);
   margin-top: 0;
+  margin-bottom: 0;
   padding-top: 25px;
   text-align: center;
 }
+
+.btn{
+  margin: 2px;
+  margin-bottom: 15px;
+  border: 2px solid rgb(45, 184, 184);
+  border-radius: 4px;
+  background-color: rgba(45, 184, 184, 0.3);
+}
+
+/* ----- MAIN */
 
 main{
   height: 90vh;
   width: 100%;
 }
+
+/* ----- MAP */
 
 #map {
   height: 90vh;

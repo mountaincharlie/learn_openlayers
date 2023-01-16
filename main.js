@@ -16,6 +16,10 @@ import Icon from 'ol/style/Icon';
 import {Fill, Stroke, Style} from 'ol/style';
 
 
+// --- GLOBAL VARS
+let zoomToMarker = 18;  // zoom level when markers are set
+
+
 // --- MAP INSTANCE
 
 // my View
@@ -36,7 +40,7 @@ var myLabelsLayer = new TileLayer({
 });
 var myLayers = [myBaseLayer, ];  // myLabelsLayer
 
-// instance of Map
+// instance of Map applying myLayers and myView
 const myMap = new Map({
   target: 'map',  // must match the id given in the html
   layers: myLayers,  // all layers
@@ -59,7 +63,7 @@ const vectorLayerStroke = new Style({
   })
 });
 
-// Calleva Park - vectorLayer
+// Calleva Park - vectorLayer (filled in polygon)
 const vectorLayerCP = new VectorImageLayer({
   source: new VectorSource({
     url: './data/calleva_park.geojson',
@@ -69,10 +73,10 @@ const vectorLayerCP = new VectorImageLayer({
   visible: true,
   title: 'Calleva Park'
 });
-myMap.addLayer(vectorLayerCP);  // adding the vectorLayer to myMap 
+// myMap.addLayer(vectorLayerCP);  // adding the vectorLayer to myMap 
 
 
-// --- MARKERS
+// --- MARKERS (how to create a marker layer)
 
 // Calleva Park - coors
 // const coorsCP = [-1.162556, 51.360851];
@@ -107,12 +111,12 @@ myMap.addLayer(vectorLayerCP);  // adding the vectorLayer to myMap
 
 /**
  * --- ideas:
- * 1) add buttons for 'My Work' and 'My Home', which onClick place a marker on the map
- * 2) add buttons for 'Take me to work' and 'Take me to home' which move the map to these locations 
+ * 1) DONE - add buttons for 'My Work' and 'My Home', which onClick place a marker on the map
+ * 2) DONE -add buttons for 'Take me to work' and 'Take me to home' which move the map to these locations 
  * 3) adding search box for coordinates which on submit takes the map to that location (with zoom 16) and creates a marker (sets the coors var) 
  */
 
-// --- 1)
+// --- 1) and 2)
 
 // name-coors object
 let nameCoorsDict = {
@@ -144,10 +148,13 @@ document.addEventListener('DOMContentLoaded', function(){
 // function removeMarkers(){
 //   console.log('undo button works')
 //   markerLayer.visible = false;
-
 // };
 
 // function to add marker
+/**
+ * Adds the marker layer to myMap
+ * Calls makeMarkerLayer() to create the layer 
+ */
 function addMarker(){
   
   let placeName = this.name;
@@ -161,6 +168,13 @@ function addMarker(){
 
 };
 
+/**
+ * Creates the marker layer
+ * Adds the marker layer to the map
+ * Calls moveMapToMarker() to adjust the map view to the coors
+ * @param {*} markerCoors 
+ * @param {*} placeName 
+ */
 function makeMarkerLayer(markerCoors, placeName){
   console.log('running makeMarkerLayer');
 
@@ -186,25 +200,23 @@ function makeMarkerLayer(markerCoors, placeName){
     visible: true,
     title: placeName
   });
-  myMap.addLayer(markerLayer);  // adding the marker to myMap
 
-  // TRY - trigger function call to move myMap to the coors (zoom 6)
-  moveMapToMarker(markerCoors);
-
+  myMap.addLayer(markerLayer);  // adds the marker to myMap
+  moveMapToMarker(markerCoors);  // adjusts the map view to the new coordinates
 };
 
+/**
+ * Adjusts the map's view properties; center and zoom 
+ * Center is set to the coordinates of the selected location
+ * Zoom is set to the 
+ * @param {*} markerCoors 
+ */
 function moveMapToMarker(markerCoors){
   const mapView = myMap.getView();
-  // const mapZoom = mapView.getZoom();
-  mapView.setZoom(18);
+  mapView.setZoom(zoomToMarker);
   mapView.setCenter(fromLonLat(markerCoors));
-  // myMap.getView().setProperties({'center':fromLonLat(markerCoors)});
 
-  // myMap.getView().setProperties({'zoom':17});
-  
-
-  displayZoom(mapView);
-
+  displayZoom(mapView);  // to check that the vars are set globally
 };
 
 function displayZoom(mapView){
@@ -213,3 +225,5 @@ function displayZoom(mapView){
   console.log(myMap.getView());
 };
 
+
+// --- 3)

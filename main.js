@@ -194,10 +194,14 @@ function makeMarkerLayer(markerCoors, placeName){
 };
 
 function moveMapToMarker(markerCoors){
-  myMap.getView().setProperties({'center':fromLonLat(markerCoors), 'zoom':17});
+  const mapView = myMap.getView();
+  const mapZoom = mapView.getZoom();
+  mapView.setZoom(18);
+  myMap.getView().setProperties({'center':fromLonLat(markerCoors)});
+
   // myMap.getView().setProperties({'zoom':17});
   console.log(myMap.getView().getProperties().center);
-  console.log(myMap.getView().getProperties().zoom);
+  console.log('zoom now:' + myMap.getView().getProperties().zoom);
   console.log(myMap.getView());
 
 

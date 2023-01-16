@@ -17,7 +17,9 @@ import {Fill, Stroke, Style} from 'ol/style';
 
 
 // --- GLOBAL VARS
+let defaultZoom = 7;
 let zoomToMarker = 18;  // zoom level when markers are set
+let createdMarkers = [];
 
 
 // --- MAP INSTANCE
@@ -27,7 +29,7 @@ var myView = new View({
   center: fromLonLat([-1.2,51]),
   // [-1.162556, 51.360851] for Hercules House, [-0.558992271475887, 51.23603781956939] for my house
   // center: [0,0],
-  zoom: 7
+  zoom: defaultZoom
 });
 
 // my layers
@@ -117,6 +119,8 @@ const vectorLayerCP = new VectorImageLayer({
  */
 
 // --- 1) and 2)
+// TRY - change colour of button from grey to teal when marker is set and make the remove button red
+
 
 // name-coors object
 let nameCoorsDict = {
@@ -134,21 +138,26 @@ document.addEventListener('DOMContentLoaded', function(){
     button.addEventListener('click', addMarker);
     console.log('button listener added')
 
-  // getting the undo button
-  const undoMarkersButton = document.getElementById('undo-markers'); 
-  // undoMarkersButton.addEventListener('click', removeMarkers);
-  undoMarkersButton.addEventListener('click', function(){
-    window.location.reload();
-  }); 
+  // // getting the undo button
+  // const undoMarkersButton = document.getElementById('undo-markers'); 
+  // // undoMarkersButton.addEventListener('click', removeMarkers);
+  // undoMarkersButton.addEventListener('click', function(){
+  //   window.location.reload();
+  // }); 
+
+  // defaultZoom
+  const defaultZoomButton = document.getElementById('default-zoom'); 
+  defaultZoomButton.addEventListener('click', setDefaultZoom);
+
 }
 });
 
-// TRY - find a way to access the markerLayer to remove specific markers
-// // function to remove markers
-// function removeMarkers(){
-//   console.log('undo button works')
-//   markerLayer.visible = false;
-// };
+// defaultZoom
+function setDefaultZoom(){
+  const mapView = myMap.getView();
+  mapView.setZoom(defaultZoom);
+
+};
 
 // function to add marker
 /**
@@ -203,6 +212,28 @@ function makeMarkerLayer(markerCoors, placeName){
 
   myMap.addLayer(markerLayer);  // adds the marker to myMap
   moveMapToMarker(markerCoors);  // adjusts the map view to the new coordinates
+
+  // adding the layer to the list of created layers
+  createdMarkers.push(markerLayer);
+
+  // function to set the remove-marker button 
+  // the remove button
+  const removeMarkersButton = document.getElementById('remove-markers'); 
+  removeMarkersButton.addEventListener('click', removeMarkers);
+};
+
+// TRY - find a way to access the markerLayer to remove specific markers
+// function to remove markers
+function removeMarkers(){
+  console.log('undo button works:');
+  console.log(createdMarkers);
+  for (let marker of createdMarkers){
+    myMap.removeLayer(marker);
+  };
+
+  // defaultZoom
+  const mapView = myMap.getView();
+  mapView.setZoom(defaultZoom);
 };
 
 /**

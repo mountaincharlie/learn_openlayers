@@ -195,15 +195,21 @@ function makeMarkerLayer(markerCoors, placeName){
 
 function moveMapToMarker(markerCoors){
   const mapView = myMap.getView();
-  const mapZoom = mapView.getZoom();
+  // const mapZoom = mapView.getZoom();
   mapView.setZoom(18);
-  myMap.getView().setProperties({'center':fromLonLat(markerCoors)});
+  mapView.setCenter(fromLonLat(markerCoors));
+  // myMap.getView().setProperties({'center':fromLonLat(markerCoors)});
 
   // myMap.getView().setProperties({'zoom':17});
-  console.log(myMap.getView().getProperties().center);
-  console.log('zoom now:' + myMap.getView().getProperties().zoom);
+  
+
+  displayZoom(mapView);
+
+};
+
+function displayZoom(mapView){
+  console.log('center now:' + mapView.getProperties().center);
+  console.log('zoom now:' + mapView.getProperties().zoom);
   console.log(myMap.getView());
-
-
 };
 
